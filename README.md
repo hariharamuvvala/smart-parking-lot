@@ -10,12 +10,15 @@ design, Mermaid source diagrams, rendered PNG diagrams, assumptions, and AI
 interaction history.
 
 The Java implementation and JUnit test suite have not been added yet.
+JUnit 5 is planned as a test-only dependency; production code will use only the
+Java standard library.
 
 ## Requirements
 
 - Java 21 or later
 - Git
 - GitHub CLI for repository operations
+- Gradle wrapper
 
 No application framework, database, REST API, or third-party runtime library is
 required.
@@ -34,12 +37,14 @@ Planned Java source structure:
 
 ```text
 src/
-  com/
-    sahaj/
-      parking/
-        domain/
-        calendar/
-        pricing/
+  main/java/com/sahaj/parking/
+    domain/
+    calendar/
+    pricing/
+  test/java/com/sahaj/parking/
+    domain/
+    calendar/
+    pricing/
 
 test/
   com/
@@ -107,7 +112,17 @@ The JUnit suite will cover:
 
 ## Build and Test
 
-Build and test commands will be added after the Java implementation is created.
+Run the unit tests:
+
+```powershell
+.\gradlew.bat test
+```
+
+Build the project:
+
+```powershell
+.\gradlew.bat build
+```
 
 ## Documentation and AI Transparency
 

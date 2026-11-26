@@ -51,36 +51,23 @@ later, they should adapt to this engine rather than becoming domain dependencies
 
 ```text
 src/
-  com/
-    sahaj/
-      parking/
-        Main.java
-        domain/
-          VehicleType.java
-          LoyaltyTier.java
-          ParkingTicket.java
-          ParkingSession.java
-          Money.java
-          Fare.java
-          PolicyName.java
-        calendar/
-          PublicHolidayCalendar.java
-          FixedPublicHolidayCalendar.java
-          TimeWindow.java
-        pricing/
-          RatePolicy.java
-          StandardHourlyPolicy.java
-          EarlyBirdPolicy.java
-          NightOwlPolicy.java
-          ParkingFeeCalculator.java
-
-test/
-  com/
-    sahaj/
-      parking/
-        domain/
-        calendar/
-        pricing/
+  main/
+    java/
+      com/
+        sahaj/
+          parking/
+            Main.java
+            domain/
+            calendar/
+            pricing/
+  test/
+    java/
+      com/
+        sahaj/
+          parking/
+            domain/
+            calendar/
+            pricing/
 ```
 
 Package names are illustrative for Java and may be adjusted if repository naming
@@ -229,7 +216,6 @@ Responsibilities:
 
 - Confirm entry and exit windows
 - Confirm same-calendar-day eligibility
-- Confirm the 24-hour rule
 - Calculate the $15.00 car flat rate
 - Apply the loyalty discount
 - Apply the vehicle multiplier
@@ -240,7 +226,6 @@ Responsibilities:
 
 - Confirm entry and exit windows
 - Confirm consecutive-calendar-day eligibility
-- Confirm the 24-hour rule
 - Calculate the $8.00 car flat rate
 - Apply the loyalty discount
 - Apply the vehicle multiplier
@@ -302,6 +287,10 @@ This naturally implements:
 - Partial overlap surcharge
 - No overlap for touching boundaries
 
+If a floating hourly block crosses midnight, split the block at midnight and
+check each date segment against that date's weekday and holiday status. Each
+peak window belongs to its own local calendar date.
+
 ## 8. Calculator Orchestration
 
 `ParkingFeeCalculator` owns the global conflict-resolution algorithm.
@@ -316,6 +305,10 @@ It must:
 6. Compare exact cent values
 7. Select the minimum fare
 8. Resolve ties using the approved priority
+
+The calculator is the single owner of the greater-than-24-hour gate. When a
+session exceeds 24 hours, it skips Early Bird and Night Owl. The special policies
+do not repeat this global check.
 
 The approved tie priority is:
 
@@ -535,10 +528,16 @@ Preferred tests:
 - Independent policy applicability tests
 - Calculator integration tests
 - Reversed timestamp tests
+- Peak blocks crossing midnight with weekday and holiday checks per date
+- Night Owl entry at the final representable time before midnight and at midnight
 - No-mutation tests
 
-The test suite may use JUnit 5 as a test-only dependency. JUnit is not needed by
-the production engine.
+The test suite uses JUnit 5 as a test-only dependency. JUnit is not needed at
+runtime; production code uses the Java standard library only.
+
+The project uses Gradle for build and test orchestration. The Gradle wrapper
+should be committed so builds are reproducible without requiring a globally
+installed Gradle version.
 
 ## 18. Failure Behavior
 

@@ -160,7 +160,37 @@ Confirmed behavior:
 **Result:** No chat-history file existed at that point. This
 `ai-chat-history.md` file was created to satisfy the assignment requirement.
 
-### 10. Repository Publication
+### 10. Design Review Decisions
+
+**User:** Requested a review of the spec and architecture before proceeding to
+implementation.
+
+**Assistant:** Identified unresolved details around:
+
+- Test framework versus the standard-library-only constraint
+- Night Owl's end-of-day timestamp interpretation
+- Ownership of the greater-than-24-hour gate
+- Peak blocks that cross midnight
+
+**User decisions:**
+
+- Use JUnit 5 as a test-only dependency; production code remains standard-library
+  only.
+- Use Gradle for build and test orchestration, with a committed wrapper.
+- Treat Night Owl entry as any timestamp from 18:00 up to, but not including,
+  midnight.
+- Keep the greater-than-24-hour gate in the calculator, avoiding duplicate
+  checks in each special policy.
+- For peak blocks crossing midnight, check each date segment using that local
+  date's weekday and holiday status.
+
+**Assistant:** Recorded the decisions and began Phase 2 with Gradle project
+scaffolding, immutable domain types, and focused unit tests. The initial JUnit
+test run exposed a missing JUnit Platform launcher runtime dependency; adding
+the aligned launcher dependency resolved discovery, and the domain tests passed
+with the installed Gradle 8.14.3.
+
+### 11. Repository Publication
 
 **User:** Asked to create the repository and push the code.
 
@@ -168,6 +198,110 @@ Confirmed behavior:
 not exist. The Java implementation had not yet been created, so the repository
 was prepared for publication with the specification, architecture, diagrams,
 README, and AI history.
+
+### 12. Phase 2 — Domain Foundation
+
+**User:** Asked what to do next, then selected a review of the specification and
+architecture before implementation.
+
+**Assistant:** Reviewed the documents and identified decisions to clarify:
+
+- JUnit test dependency versus the standard-library-only constraint
+- Night Owl's final entry-time boundary
+- Ownership of the greater-than-24-hour rule
+- Peak blocks spanning midnight
+
+**User decisions:** JUnit 5 is acceptable as a test-only dependency; Night Owl
+entry is permitted from 18:00 up to but not including midnight; the calculator
+owns and enforces the over-24-hour gate; peak blocks crossing midnight are
+checked by local date segment, using each date's weekday and holiday status.
+Gradle was selected for build and test orchestration.
+
+**Assistant:** Updated the specification, architecture, and README to record
+those decisions. Implemented the Gradle project skeleton and immutable domain
+types for vehicle, loyalty tier, money, ticket, parking session, fare, and policy
+name. Added JUnit tests for domain values, validation, exact elapsed duration,
+and the 24-hour boundary.
+
+The first JUnit run exposed an unaligned JUnit Platform launcher. Adding the
+launcher as a test runtime dependency fixed test discovery. A clean local
+Gradle test run passed all 12 tests, and `gradle build` succeeded.
+
+Gradle wrapper files were generated. Running the wrapper could not download the
+Gradle distribution because connections to `services.gradle.org` timed out;
+validation therefore used the installed Gradle 8.14.3.
+
+### 13. Credit Tracking
+
+**User:** Reported usage of 21.7 out of 200 credits.
+
+**Assistant:** Calculated this as 10.85% used, below the requested 60% alert
+threshold of 120 credits. At that report, 98.3 additional credits would reach
+the threshold.
+
+### 14. Latest Update
+
+**User:** Asked to push the latest changes and update this chat history file.
+
+**Assistant:** Recording this update, then committing and pushing the Gradle
+project, domain foundation, tests, documentation decisions, and wrapper files.
+
+## User Prompt Log
+
+The user prompts are reproduced below as captured in the conversation (with
+line wrapping for readability). The two assignment PDFs are referenced by
+filename; their full text is in the supplied attachments.
+
+1. `[Assignment_Instructions.pdf](file:///d%3A/Smart%20Parking%20lot/Assignment_Instructions.pdf)
+   [The_Smart_Parking_Lot_v2.pdf](file:///d%3A/Smart%20Parking%20lot/The_Smart_Parking_Lot_v2.pdf)
+   This is Smart Parking Lot assignment. As Software architect this need to
+   built based on the spec and instructions given. First understand documents,
+   come up with the plan. This should consider spec, test cases, system design,
+   architecture and domain objects. Consdier performance security aspects as
+   well. Before starting the plan. If any questions ask now.`
+2. `Before I read the plan, I want to give few more instructions .`
+3. `1) All the chat histroy has to be checked in and shared with project. Readme
+   should be spricific to project. THis should be sepearete from readme file
+   2) Push this code into github. This is new repo. We need to create as well
+   3) Keep montior context and credits, if it cross 60% of utilization let me know.`
+4. `Before starting, Lets do step by step rather doing everything one shot.
+   Provide plan for approach`
+5. `This looks like, you understand the spec, statrted implemntation phases.
+   Lets have Phase 0, where dive the spec, in next phase provide system design`
+6. `Lets creat spec document for this. Provide the assumptions you have consider`
+7. `I have gone throguh spec. Looks correct, as we make progress, lets revisit
+   and see if any modifications.`
+8. `Lets understand tie-break sceneraion.`
+9. `For now, this tie break make sense which is priortiy based`
+10. `Correct this, it should be in the reverse order`
+11. `Write in chat as comment. One example ti-break has shown here. for the sake
+    of dicscussion, accepted all asumptions. In theroy, we have to go through
+    every piece and adjust the spec.`
+12. `Provide the system/archtiectural design`
+13. `Stucturally looks good, with tech and data flow, negative testing, failure
+    cases. Lets deep dive on edge case, like entry time is after the exit time`
+14. `Can you create system/archtiectural design daigrams`
+15. `as images`
+16. `where is this chat file`
+17. `create repo and push the code`
+18. `whats next`
+19. `21.7 of 200 credits are used`
+20. `push the latest changes and update the chat history file`
+
+### Structured Decisions
+
+- Language: Java
+- Public holiday source: fixed test calendar
+- GitHub: public `hariharamuvvala/smart-parking-lot`
+- Chat history filename: `ai-chat-history.md`
+- Tie priority: Night Owl, Early Bird, Standard Hourly
+- JUnit 5: test-only dependency
+- Gradle: build and test orchestration
+- Night Owl entry: 18:00 inclusive up to, but not including, midnight
+- Over-24-hour gate: owned by the calculator
+- Peak blocks crossing midnight: evaluate each local date segment against that
+  date's weekday and holiday status
+- Credit update: 21.7 of 200 used; alert threshold 60%
 
 ## Transparency Statement
 

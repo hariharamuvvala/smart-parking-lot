@@ -77,7 +77,7 @@ A parking ticket contains:
 
 - A vehicle
 - An entry timestamp
-- An optional loyalty tier
+- A loyalty tier, using `NONE` when the customer has no loyalty membership
 
 A ticket is an immutable domain record. It must not calculate or store the exit fee.
 
@@ -98,12 +98,12 @@ The system calculates elapsed duration from the exact entry and exit timestamps.
 |---|---|
 | Entry is after exit | Reject session construction with `IllegalArgumentException` |
 | Entry is equal to exit | Reject as zero-duration; do not return a zero fee |
-| Entry or exit is `null` | Reject with `IllegalArgumentException` or `NullPointerException` before pricing |
-| Ticket is `null` | Reject before session or policy evaluation |
-| Vehicle is `null` | Reject at ticket construction |
-| Loyalty tier is `null` | Reject; use explicit `NONE` where no loyalty discount applies |
+| Entry or exit is `null` | Reject with `NullPointerException` before pricing |
+| Ticket is `null` | Reject with `NullPointerException` before session or policy evaluation |
+| Vehicle is `null` | Reject with `NullPointerException` at ticket construction |
+| Loyalty tier is `null` | Reject with `NullPointerException`; use explicit `NONE` where no loyalty discount applies |
 | Unknown vehicle or tier enum value | Reject because only documented enum values are accepted |
-| Public holiday calendar is `null` | Reject calculator/policy construction |
+| Public holiday calendar is `null` | Reject with `NullPointerException` when constructing its consumer |
 | 1 minute duration | Standard rounds upward to 1 hour |
 | 60 minutes duration | Standard charges 1 complete hour |
 | 61 minutes duration | Standard rounds upward to 2 hours |
@@ -113,6 +113,7 @@ The system calculates elapsed duration from the exact entry and exit timestamps.
 | Entry 06:00 / exit 15:30 | Early Bird valid subject to same-day and non-over-24-hour rules |
 | Exit exactly 19:00 | Early Bird invalid because exit end is exclusive |
 | Entry exactly 18:00 | Night Owl valid subject to exit conditions |
+| Night Owl entry at 23:59:59.999999999 | Valid entry time; entry at next-day 00:00 is not |
 | Exit exactly 10:00 | Night Owl invalid because exit end is exclusive |
 | Night Owl exit on skipped/nonconsecutive date | Invalid |
 | Night Owl exit on next date before 05:00 | Invalid |
@@ -211,6 +212,11 @@ overlaps a peak window.
 
 Partial overlap is sufficient to surcharge the entire one-hour block.
 
+If a floating hourly block crosses midnight, assess its overlap with each local
+calendar-date segment separately. A peak window applies only to the date on which
+that window occurs, and only if that date is Monday through Friday and is not a
+public holiday.
+
 For example, entry 06:30 and exit 08:30 produces:
 
 - Hour 1 from 06:30–07:30: $5.00 x 1.5 = $7.50
@@ -252,7 +258,7 @@ A Car enters at 06:30 and exits at 16:00:
 Night Owl is valid only when all conditions hold:
 
 - Entry is at or after 18:00
-- Entry occurs through the end of the entry calendar day
+- Entry occurs before midnight on the entry calendar day
 - Exit is at or after 05:00 on the next consecutive calendar day
 - Exit is before 10:00
 - Entry and exit are on consecutive calendar days
@@ -281,6 +287,10 @@ For equal fees, policy selection follows reverse policy priority:
 
 This tie rule prevents nondeterministic results and is explicitly agreed for this
 implementation.
+
+The calculator owns the greater-than-24-hour gate: it skips both special policies
+for those sessions. The special-policy implementations do not duplicate this
+global gate.
 
 ## 9. Monetary Rules
 
@@ -341,8 +351,8 @@ production holiday source.
    policy amount has been calculated.
 10. **Special-rate discounts:** The same percentage structure applies to both
     Early Bird and Night Owl.
-11. **No loyalty tier:** The engine allows `NONE` or an optional absent tier.
-    It produces no special-rate discount.
+11. **No loyalty tier:** The engine uses explicit `NONE` and applies no special-rate
+    discount. Loyalty tier is non-null in a valid ticket.
 12. **Tie handling:** Night Owl wins ties, followed by Early Bird, then Standard
     Hourly.
 13. **Invalid input:** Exit before or equal to entry is invalid.
@@ -389,7 +399,7 @@ production holiday source.
 
 - Stores the vehicle
 - Stores the entry timestamp
-- Stores the optional loyalty tier
+- Stores the non-null loyalty tier; `NONE` represents no membership
 
 `ParkingSession`:
 
