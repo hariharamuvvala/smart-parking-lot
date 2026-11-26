@@ -263,6 +263,7 @@ It is:
 - Replaceable
 - Testable
 - Suitable for the no-database constraint
+- Immutable after construction
 
 The default test set must be identified as illustrative, not a comprehensive
 holiday list.
@@ -273,6 +274,10 @@ holiday list.
 end.
 
 It can answer whether a one-hour block overlaps the window.
+
+The window applies to a specified local calendar date. A caller evaluating a
+block that crosses midnight checks each date segment against that date's window
+and weekday/holiday status.
 
 Peak-window detection must use a positive intersection rule:
 
@@ -525,6 +530,9 @@ Preferred tests:
 
 - Table-driven boundary tests
 - Exact-cent assertions
+- Fixed-holiday lookup, defensive copying, and weekday exclusion
+- Time-window edge overlap, touching boundaries, and midnight crossing
+- Upward rounding at exact, fractional, and sub-hour duration boundaries
 - Independent policy applicability tests
 - Calculator integration tests
 - Reversed timestamp tests

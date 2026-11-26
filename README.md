@@ -5,13 +5,12 @@ multi-level parking lot.
 
 ## Current Status
 
-This repository currently contains the completed specification, architectural
-design, Mermaid source diagrams, rendered PNG diagrams, assumptions, and AI
-interaction history.
+This repository contains the specification, architecture, diagrams, and the
+Java domain foundation with unit tests. Pricing policies and the fare-selection
+calculator are the next implementation steps.
 
-The Java implementation and JUnit test suite have not been added yet.
-JUnit 5 is planned as a test-only dependency; production code will use only the
-Java standard library.
+JUnit 5 is a test-only dependency; production code uses only the Java standard
+library.
 
 ## Requirements
 
@@ -33,7 +32,7 @@ required.
 
 ## Project Structure
 
-Planned Java source structure:
+Java source structure:
 
 ```text
 src/
@@ -45,14 +44,6 @@ src/
     domain/
     calendar/
     pricing/
-
-test/
-  com/
-    sahaj/
-      parking/
-        domain/
-        calendar/
-        pricing/
 ```
 
 ## Pricing Overview
@@ -94,7 +85,7 @@ cases.
 
 ## Planned Validation
 
-The JUnit suite will cover:
+The JUnit suite covers and will expand to cover:
 
 - Progressive hourly rates
 - Floating hourly blocks

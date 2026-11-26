@@ -243,8 +243,20 @@ the threshold.
 
 **User:** Asked to push the latest changes and update this chat history file.
 
-**Assistant:** Recording this update, then committing and pushing the Gradle
-project, domain foundation, tests, documentation decisions, and wrapper files.
+**Assistant:** Updated the prompt log and pushed the Gradle project, domain
+foundation, tests, documentation decisions, and wrapper files in commit
+`2958a0d`.
+
+### 15. Phase 3 — Calendar and Shared Time Rules
+
+**User:** `thanks for the confirmation, go ahead next`
+
+**Assistant:** Added immutable fixed-holiday lookup, weekday-excluding-holiday
+rules, date-aware time-window overlap, and duration ceiling to whole hours.
+Added tests for holiday configuration and defensive copying, weekday/weekend
+behavior, inclusive/exclusive window overlap, cross-midnight intervals, and
+duration rounding boundaries. `gradle clean test` passed; `gradle build`
+succeeded. The suite contains 24 tests with no failures or errors.
 
 ## User Prompt Log
 
@@ -287,6 +299,7 @@ filename; their full text is in the supplied attachments.
 18. `whats next`
 19. `21.7 of 200 credits are used`
 20. `push the latest changes and update the chat history file`
+21. `thanks for the confirmation, go ahead next`
 
 ### Structured Decisions
 
