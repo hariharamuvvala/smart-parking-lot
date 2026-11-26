@@ -1,14 +1,14 @@
 # Smart Parking Lot Rate Calculator
 
-A Java domain engine for calculating the lowest valid parking fare for a
-multi-level parking lot.
+A Java parking-fare engine with an interactive console for calculating the
+lowest valid fare for a multi-level parking lot.
 
 ## Current Status
 
-This repository contains the specification, architecture, diagrams, and the
-Java domain foundation, all three pricing policies, and the minimum-fare
-calculator with unit tests. A user-facing application entry point is not in
-scope for the pricing engine.
+This repository contains the specification, architecture, diagrams, Java
+domain model, three pricing policies, minimum-fare calculator, and an
+interactive console application. The console is a thin adapter around the
+in-process pricing engine.
 
 JUnit 5 is a test-only dependency; production code uses only the Java standard
 library.
@@ -16,12 +16,10 @@ library.
 ## Requirements
 
 - Java 21 or later
-- Git
-- GitHub CLI for repository operations
 - Gradle wrapper
 
-No application framework, database, REST API, or third-party runtime library is
-required.
+No application framework, database, REST API, or third-party runtime library
+is required.
 
 ## Repository Documents
 
@@ -38,10 +36,12 @@ Java source structure:
 ```text
 src/
   main/java/com/sahaj/parking/
+    Main.java
     domain/
     calendar/
     pricing/
   test/java/com/sahaj/parking/
+    MainTest.java
     domain/
     calendar/
     pricing/
@@ -60,13 +60,15 @@ only Standard Hourly.
 
 ### Monetary Precision
 
-The implementation will store fares as integer cents. It will not use Java
+The implementation stores fares as integer cents. It does not use Java
 floating-point types for fare calculation.
 
 ### Public Holidays
 
-The specification provides no public-holiday source. A fixed, configurable
-`LocalDate` set will be used for the assignment and tests.
+The specification provides no public-holiday source. The console accepts a
+comma-separated list of ISO dates for the calculation; leave the prompt blank
+when no holidays are configured. The engine receives these dates through its
+fixed, immutable holiday calendar.
 
 ## Assumptions
 
@@ -84,9 +86,9 @@ The specification provides no public-holiday source. A fixed, configurable
 See [SPECIFICATION.md](SPECIFICATION.md) for the complete assumptions and edge
 cases.
 
-## Planned Validation
+## Validation
 
-The JUnit suite covers and will expand to cover:
+The JUnit suite covers:
 
 - Progressive hourly rates
 - Floating hourly blocks
@@ -103,6 +105,18 @@ The JUnit suite covers and will expand to cover:
 - Tie priority
 
 ## Build and Test
+
+Run the interactive calculator:
+
+```powershell
+.\gradlew.bat run
+```
+
+Enter the vehicle type, entry and exit local timestamps
+(`yyyy-MM-ddTHH:mm`, without a timezone), loyalty tier, and optional
+comma-separated public-holiday dates (`yyyy-MM-dd`). The console prints the fare
+and selected policy. Invalid input is reported to stderr and exits with a
+non-zero status.
 
 Run the unit tests:
 

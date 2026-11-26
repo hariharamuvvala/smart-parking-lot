@@ -313,6 +313,7 @@ filename; their full text is in the supplied attachments.
 21. `thanks for the confirmation, go ahead next`
 22. `go ahead next`
 23. `Go ahead`
+24. `lets complete the code first`
 
 ### Structured Decisions
 
@@ -328,6 +329,7 @@ filename; their full text is in the supplied attachments.
 - Peak blocks crossing midnight: evaluate each local date segment against that
   date's weekday and holiday status
 - Credit update: 21.7 of 200 used; alert threshold 60%
+- User selected an interactive console application as the final code scope
 
 ### 17. Phase 5 — Best-Value Calculator
 
@@ -340,6 +342,21 @@ fare with the approved Night Owl > Early Bird > Standard tie priority. Added
 calculator tests for minimum selection, tie priority, the 24-hour gate,
 inapplicable policies, and failure behavior. `gradle clean test` and
 `gradle build` passed; the suite contains 54 tests with no failures or errors.
+
+### 18. Phase 6 — Interactive Console
+
+**User:** `lets complete the code first`
+
+**User (scope confirmation):** `interactive_cli`
+
+**Assistant:** Added an interactive console entry point with vehicle, timestamp,
+loyalty, and optional public-holiday inputs. It reports the selected fare and
+policy, validates malformed input and invalid sessions, and uses the existing
+pricing engine. Updated the run instructions and architecture/specification
+documents to reflect the console boundary. `gradle clean test` and
+`gradle build` passed; the suite contains 58 tests with no failures or errors.
+The Gradle `run` task was also exercised with a sample input and returned the
+expected `$5.00` Standard Hourly fare.
 
 ## Transparency Statement
 

@@ -41,11 +41,12 @@ The architecture is layered conceptually:
 1. **Domain layer**: state and domain invariants
 2. **Pricing layer**: policy applicability and calculation
 3. **Calendar/time layer**: weekday, holiday, and time-window rules
-4. **Application entry point**: demonstrates or invokes the engine
+4. **Application entry point**: validates interactive input and invokes the engine
 5. **Test layer**: policy, boundary, and integration tests
 
-There is no persistence or transport layer. If an API or database is introduced
-later, they should adapt to this engine rather than becoming domain dependencies.
+There is no persistence or network transport layer. The console is a thin
+application adapter. If an API or database is introduced later, it should adapt
+to this engine rather than becoming a domain dependency.
 
 ## 3. Package Structure
 
@@ -447,13 +448,12 @@ Defensive boundaries include:
 - Stateless calculator
 - No external I/O
 
-If added to a REST or CLI boundary later:
+At the interactive console boundary:
 
-- Validate timestamp syntax and timezone
+- Validate timestamp syntax and require caller-normalized local times
 - Validate vehicle and loyalty strings before enum conversion
-- Use authorization before exposing ticket or fee operations
 - Treat calculation inputs as untrusted
-- Return domain validation errors rather than stack traces
+- Report invalid input without exposing stack traces
 
 ## 14. Concurrency
 
@@ -474,7 +474,7 @@ The design can grow to support:
 - A production holiday calendar
 - Parking session reporting
 - Persistence adapters
-- HTTP or CLI adapters
+- HTTP or richer CLI adapters
 
 The following should remain unchanged when those adapters are added:
 

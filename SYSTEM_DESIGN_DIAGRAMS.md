@@ -19,8 +19,8 @@ The rendered PNG images are available in [diagrams/](diagrams/):
 - [13-future-adapter-boundary.png](diagrams/13-future-adapter-boundary.png)
 
 This document provides visual views of the system design. The diagrams describe
-the in-process Java billing engine and are deliberately independent of any API,
-database, framework, or user interface.
+the in-process Java billing engine and its lightweight interactive console.
+They remain independent of any database, framework, or network API.
 
 ## 1. System Context
 
@@ -40,15 +40,15 @@ flowchart LR
     EntryExit -->|"Fare or ticket settlement result"| Customer
 ```
 
-The entry/exit application is a future adapter concept. It is not required for
-the assignment implementation.
+The implemented console is a thin local adapter. Physical entry/exit systems
+and customer-facing applications remain outside the assignment scope.
 
 ## 2. High-Level Component Architecture
 
 ```mermaid
 flowchart TB
     subgraph App["Application Boundary"]
-        Main["Main / Future Adapter"]
+        Main["Interactive Console (Main)"]
     end
 
     subgraph Engine["Pricing Engine"]
@@ -462,13 +462,13 @@ service dependency.
 ```mermaid
 flowchart LR
     REST["Future REST Adapter"]
-    CLI["Future CLI Adapter"]
+    CLI["Interactive Console (implemented)"]
     Persistence["Future Persistence Adapter"]
 
     DomainAPI["ParkingFeeCalculator"]
 
     REST -->|"validated DTO conversion"| DomainAPI
-    CLI -->|"validated argument conversion"| DomainAPI
+    CLI -->|"validated prompt input conversion"| DomainAPI
     Persistence -->|"ticket/session lookup"| DomainAPI
 
     DomainAPI -->|"Fare"| REST
@@ -476,5 +476,5 @@ flowchart LR
     DomainAPI -->|"Fare"| Persistence
 ```
 
-These adapters are not implemented in the assignment but define the integration
-boundary for future work.
+The interactive console is implemented as a thin adapter. REST and persistence
+adapters remain future integration options.

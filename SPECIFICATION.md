@@ -6,8 +6,9 @@ This specification defines the business rules, domain model, architectural bound
 calculation rules, assumptions, and acceptance criteria for the Smart Parking Lot
 Rate Calculator.
 
-The implementation is a Java billing engine. It has no REST API, database, GUI, CLI
-framework, or external runtime dependency.
+The implementation is a Java billing engine with a small interactive console
+adapter. It has no REST API, database, GUI, CLI framework, or external runtime
+dependency.
 
 ## 2. Scope
 
@@ -26,6 +27,7 @@ framework, or external runtime dependency.
 - Minimum-fare conflict resolution
 - Public-holiday-aware weekday peak pricing
 - Exact monetary calculation
+- Interactive console input and fare output
 - Unit-testable domain rules
 
 ### Excluded
