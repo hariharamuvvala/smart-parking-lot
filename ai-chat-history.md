@@ -312,6 +312,7 @@ filename; their full text is in the supplied attachments.
 20. `push the latest changes and update the chat history file`
 21. `thanks for the confirmation, go ahead next`
 22. `go ahead next`
+23. `Go ahead`
 
 ### Structured Decisions
 
@@ -327,6 +328,18 @@ filename; their full text is in the supplied attachments.
 - Peak blocks crossing midnight: evaluate each local date segment against that
   date's weekday and holiday status
 - Credit update: 21.7 of 200 used; alert threshold 60%
+
+### 17. Phase 5 — Best-Value Calculator
+
+**User:** `Go ahead`
+
+**Assistant:** Added `ParkingFeeCalculator` to evaluate Standard Hourly for
+every valid session, skip Early Bird and Night Owl when duration exceeds 24
+hours, evaluate applicable special policies otherwise, and return the lowest
+fare with the approved Night Owl > Early Bird > Standard tie priority. Added
+calculator tests for minimum selection, tie priority, the 24-hour gate,
+inapplicable policies, and failure behavior. `gradle clean test` and
+`gradle build` passed; the suite contains 54 tests with no failures or errors.
 
 ## Transparency Statement
 
