@@ -24,7 +24,8 @@ is required.
 ## Repository Documents
 
 - [SPECIFICATION.md](SPECIFICATION.md) - business rules and acceptance criteria
-- [ARCHITECTURE.md](ARCHITECTURE.md) - system design and component responsibilities
+- [ARCHITECTURE.md](ARCHITECTURE.md) - system design, component responsibilities,
+  and conditional future enhancements
 - [SYSTEM_DESIGN_DIAGRAMS.md](SYSTEM_DESIGN_DIAGRAMS.md) - editable Mermaid diagrams
 - [diagrams/](diagrams/) - rendered PNG architecture diagrams
 - [ai-chat-history.md](ai-chat-history.md) - AI assistance history

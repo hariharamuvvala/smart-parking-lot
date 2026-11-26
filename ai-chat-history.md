@@ -318,6 +318,7 @@ filename; their full text is in the supplied attachments.
 26. The user reported an invalid session because the exit time was not after entry.
 27. `success,`
 28. `next please`
+29. `we should add future enhancements thinking as architect`
 
 ### Structured Decisions
 
@@ -376,6 +377,16 @@ assignment PDFs. Re-ran `gradle clean test` and `gradle build`; all 58 tests
 passed with no failures or errors. The review found that the assignment asks
 README.md itself to cover assumptions, decisions, trade-offs, and alternatives,
 so those summaries were added. Verified the clean working tree and pushed state.
+
+### 20. Conditional Future Enhancements
+
+**User:** `we should add future enhancements thinking as architect`
+
+**Assistant:** Added a conditional architecture roadmap covering authoritative
+holiday/rate configuration, external integration boundaries, audit and
+persistence, multi-location timezone handling, observability and measured
+performance optimization, and adjacent capabilities kept outside the pricing
+engine. These are future options, not current implementation commitments.
 
 ## Transparency Statement
 

@@ -465,25 +465,114 @@ The fixed holiday calendar should use an immutable or thread-safe set.
 The design supports concurrent calls without locks or shared mutable session
 state.
 
-## 15. Extensibility
+## 15. Extensibility and Future Enhancements
 
-The design can grow to support:
+The items below are conditional architecture options, not commitments for the
+assignment implementation. Introduce them only when an operational requirement
+justifies the added infrastructure. Keep the pricing engine deterministic and
+independent of transport, persistence, and external services.
 
-- A new rate policy
-- A new loyalty tier
-- A production holiday calendar
-- Parking session reporting
-- Persistence adapters
-- HTTP or richer CLI adapters
+### 15.1 Authoritative Holidays and Versioned Rates
 
-The following should remain unchanged when those adapters are added:
+If the system moves beyond manual holiday entry or rates change without code
+deployments:
 
-- Domain objects
-- `RatePolicy` contract
-- Exact fare calculation
-- Minimum-fare rule
+- Replace caller-entered holiday dates with an authoritative source per parking
+  location and jurisdiction.
+- Add effective-dated rate configuration for base rates, peak windows, loyalty
+  discounts, and vehicle multipliers.
+- Validate configuration before activation and expose it to calculations as an
+  immutable snapshot.
+- Identify the calendar and rate version used for each fare so prior
+  calculations can be explained or reproduced.
 
-Adapters should translate external input and output rather than implement pricing.
+Do not silently update a calendar or rate set during a calculation.
+
+### 15.2 External Integration and Trust Boundaries
+
+If a parking operator needs automated entry/exit, payment, or customer-system
+integration, add an adapter around `ParkingFeeCalculator` rather than moving
+pricing into the adapter.
+
+- Validate and normalize transport inputs before constructing domain objects.
+- Authenticate and authorize callers; apply request-size limits, rate limits,
+  and idempotency controls where the integration requires them.
+- Obtain loyalty eligibility from an authoritative customer system rather than
+  trusting an unverified external tier.
+- Keep payment authorization and settlement outside the fare calculation.
+
+The current console is only a local adapter and does not provide these
+production controls.
+
+### 15.3 Audit and Persistence
+
+If billing disputes, reconciliation, or reporting require durable records, add a
+persistence adapter that records only the necessary calculation evidence:
+
+- Ticket/session reference and normalized entry/exit timestamps
+- Selected policy and final amount
+- Rate and holiday-calendar version identifiers
+- Calculation time and a correlation identifier at the application boundary
+
+Define retention, access controls, and personal-data minimization before storing
+customer or vehicle identifiers. Persistence must not become a dependency of a
+pricing policy.
+
+### 15.4 Multiple Locations and Time Zones
+
+The current domain uses `LocalDateTime` in a caller-normalized local context. If
+multiple locations or daylight-saving transitions become in scope, carry an
+absolute instant plus the parking location's `ZoneId` at the application
+boundary. Define how ambiguous and nonexistent local times are resolved before
+changing the domain model. Peak windows and holidays must be evaluated using
+that location's local date and calendar.
+
+### 15.5 Observability and Performance
+
+For production operation, add structured decision logs and metrics for
+calculation volume, selected policy, validation failures, and latency. Avoid
+logging raw customer or vehicle identifiers unless required and protected.
+Add tracing and operational health checks at the adapter/service layer, not in
+the pricing policies.
+
+The current Standard Hourly calculation is proportional to billed hours. If
+load tests or profiling show this to be a bottleneck, optimize repeated
+non-peak segments while preserving floating-block boundaries, date-specific
+holiday checks, and exact-cent results. Keep the straightforward implementation
+until measurements justify that complexity.
+
+### 15.6 Adjacent Business Capabilities
+
+Taxes, refunds, payment settlement, reservations, spot assignment, and barrier
+control are outside the current scope. If introduced, model them as separate
+application/domain capabilities with explicit contracts; do not fold their
+state or side effects into `RatePolicy`.
+
+### 15.7 Suggested Sequence
+
+1. Before live billing, establish authoritative holiday/rate sources and
+   versioned immutable calculation inputs.
+2. Before external integration, add the relevant adapter, input validation,
+   authentication/authorization, and idempotency controls.
+3. Before financial reconciliation, define audit records, retention, access
+   controls, and operational metrics.
+4. Before serving multiple locations, define location and daylight-saving
+   semantics and test their calendar boundaries.
+5. Optimize the hourly path only after representative load tests identify a
+   measurable bottleneck.
+
+### 15.8 Stable Extension Points
+
+When adding rate policies or adapters, preserve:
+
+- Immutable domain values and exact-cent calculations
+- The `RatePolicy` applicability/result contract
+- The calculator's minimum-fare and deterministic tie behavior
+- Isolation of calendar lookup from policy logic
+- The rule that adapters translate inputs/outputs but do not implement pricing
+
+A new policy should add its implementation and an explicit calculator
+registration/tie-priority decision, with boundary and conflict tests.
 
 ## 16. Trade-offs
 
