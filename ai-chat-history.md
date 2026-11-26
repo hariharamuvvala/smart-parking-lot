@@ -319,6 +319,7 @@ filename; their full text is in the supplied attachments.
 27. `success,`
 28. `next please`
 29. `we should add future enhancements thinking as architect`
+30. `create presentation`
 
 ### Structured Decisions
 
@@ -387,6 +388,15 @@ holiday/rate configuration, external integration boundaries, audit and
 persistence, multi-location timezone handling, observability and measured
 performance optimization, and adjacent capabilities kept outside the pricing
 engine. These are future options, not current implementation commitments.
+
+### 21. Architecture Presentation
+
+**User:** `create presentation`
+
+**Assistant:** Created a 10-slide PowerPoint architecture review deck covering
+business requirements, system and domain architecture, pricing policies,
+minimum-fare selection, edge cases, quality attributes, test evidence, and the
+conditional future roadmap. Linked the deck from README.md.
 
 ## Transparency Statement
 

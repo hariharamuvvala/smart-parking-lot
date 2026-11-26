@@ -26,6 +26,8 @@ is required.
 - [SPECIFICATION.md](SPECIFICATION.md) - business rules and acceptance criteria
 - [ARCHITECTURE.md](ARCHITECTURE.md) - system design, component responsibilities,
   and conditional future enhancements
+- [Architecture presentation](presentation/SmartParkingLot-Architecture.pptx) -
+  concise 10-slide design review deck
 - [SYSTEM_DESIGN_DIAGRAMS.md](SYSTEM_DESIGN_DIAGRAMS.md) - editable Mermaid diagrams
 - [diagrams/](diagrams/) - rendered PNG architecture diagrams
 - [ai-chat-history.md](ai-chat-history.md) - AI assistance history
