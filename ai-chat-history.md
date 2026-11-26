@@ -320,6 +320,9 @@ filename; their full text is in the supplied attachments.
 28. `next please`
 29. `we should add future enhancements thinking as architect`
 30. `create presentation`
+31. `check in the presentation as well. and also check the credits consumed
+    and update`
+32. The user reported 47.2 credits consumed.
 
 ### Structured Decisions
 
@@ -334,7 +337,9 @@ filename; their full text is in the supplied attachments.
 - Over-24-hour gate: owned by the calculator
 - Peak blocks crossing midnight: evaluate each local date segment against that
   date's weekday and holiday status
-- Credit update: 21.7 of 200 used; alert threshold 60%
+- Credit quota: 200; notify at 60% (120 credits)
+- Usage reports: 21.7/200 earlier; latest user-reported usage is 47.2/200
+  (23.6%) on 2026-11-26
 - User selected an interactive console application as the final code scope
 
 ### 17. Phase 5 — Best-Value Calculator
@@ -397,6 +402,16 @@ engine. These are future options, not current implementation commitments.
 business requirements, system and domain architecture, pricing policies,
 minimum-fare selection, edge cases, quality attributes, test evidence, and the
 conditional future roadmap. Linked the deck from README.md.
+
+### 22. Presentation Check-In and Credit Update
+
+**User:** `check in the presentation as well. and also check the credits consumed
+and update`
+
+**Assistant:** Verified that `presentation/SmartParkingLot-Architecture.pptx`
+is tracked in `origin/main` at commit `a2da7a1` and that the working tree is
+clean. The user reported usage of 47.2 out of 200 credits (23.6%), below the
+60% notification threshold of 120 credits.
 
 ## Transparency Statement
 
