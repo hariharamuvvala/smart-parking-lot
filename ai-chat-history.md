@@ -258,6 +258,17 @@ behavior, inclusive/exclusive window overlap, cross-midnight intervals, and
 duration rounding boundaries. `gradle clean test` passed; `gradle build`
 succeeded. The suite contains 24 tests with no failures or errors.
 
+### 16. Phase 4 — Pricing Policies
+
+**User:** `go ahead next`
+
+**Assistant:** Implemented the `RatePolicy` contract and the Standard Hourly,
+Early Bird, and Night Owl policies. Added tests for progressive hourly rates,
+peak boundaries and partial overlap, weekends and holidays, vehicle multipliers,
+loyalty discounts, special-rate eligibility windows, and next-day conditions.
+`gradle clean test` and `gradle build` passed; the suite contains 45 tests with
+no failures or errors. The minimum-fare calculator remains for the next phase.
+
 ## User Prompt Log
 
 The user prompts are reproduced below as captured in the conversation (with
@@ -300,6 +311,7 @@ filename; their full text is in the supplied attachments.
 19. `21.7 of 200 credits are used`
 20. `push the latest changes and update the chat history file`
 21. `thanks for the confirmation, go ahead next`
+22. `go ahead next`
 
 ### Structured Decisions
 

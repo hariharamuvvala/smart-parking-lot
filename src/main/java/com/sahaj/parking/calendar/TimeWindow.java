@@ -14,6 +14,11 @@ public record TimeWindow(LocalTime startInclusive, LocalTime endExclusive) {
         }
     }
 
+    public boolean contains(LocalTime time) {
+        Objects.requireNonNull(time, "time");
+        return !time.isBefore(startInclusive) && time.isBefore(endExclusive);
+    }
+
     public boolean overlapsOnDate(
             LocalDate date,
             LocalDateTime intervalStart,

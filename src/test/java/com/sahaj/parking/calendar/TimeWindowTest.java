@@ -17,6 +17,8 @@ class TimeWindowTest {
 
     @Test
     void treatsPeakStartAsInclusiveAndPeakEndAsExclusive() {
+        assertTrue(MORNING_PEAK.contains(LocalTime.of(7, 0)));
+        assertFalse(MORNING_PEAK.contains(LocalTime.of(10, 0)));
         assertTrue(MORNING_PEAK.overlapsOnDate(
                 DATE,
                 DATE.atTime(7, 0),

@@ -6,8 +6,8 @@ multi-level parking lot.
 ## Current Status
 
 This repository contains the specification, architecture, diagrams, and the
-Java domain foundation with unit tests. Pricing policies and the fare-selection
-calculator are the next implementation steps.
+Java domain foundation and all three pricing policies with unit tests. The
+fare-selection calculator is the next implementation step.
 
 JUnit 5 is a test-only dependency; production code uses only the Java standard
 library.
