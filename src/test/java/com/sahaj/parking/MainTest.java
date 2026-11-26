@@ -18,7 +18,7 @@ class MainTest {
                 "car",
                 "2026-11-26T06:30",
                 "2026-11-26T07:30",
-                "none",
+                "",
                 "2026-11-26");
         StringWriter output = new StringWriter();
         StringWriter error = new StringWriter();

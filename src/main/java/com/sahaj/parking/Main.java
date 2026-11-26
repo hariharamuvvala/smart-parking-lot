@@ -61,12 +61,7 @@ public final class Main {
                     output,
                     "Exit time (ISO local date-time, no timezone, e.g. 2026-11-26T16:00): ",
                     "exit time");
-            LoyaltyTier loyaltyTier = readEnum(
-                    reader,
-                    output,
-                    "Loyalty tier (NONE, SILVER, GOLD, PLATINUM): ",
-                    LoyaltyTier.class,
-                    "loyalty tier");
+            LoyaltyTier loyaltyTier = readLoyaltyTier(reader, output);
             Set<LocalDate> holidays = readHolidays(reader, output);
 
             ParkingTicket ticket = new ParkingTicket(vehicle, entry, loyaltyTier);
@@ -105,6 +100,27 @@ public final class Main {
             Class<E> enumType,
             String fieldName) throws IOException, InputException {
         String input = readLine(reader, output, prompt, fieldName);
+        return parseEnum(input, enumType, fieldName);
+    }
+
+    private static LoyaltyTier readLoyaltyTier(
+            BufferedReader reader,
+            PrintWriter output) throws IOException, InputException {
+        String input = readLine(
+                reader,
+                output,
+                "Loyalty tier (NONE, SILVER, GOLD, PLATINUM; press Enter for NONE): ",
+                "loyalty tier");
+        if (input.isBlank()) {
+            return LoyaltyTier.NONE;
+        }
+        return parseEnum(input, LoyaltyTier.class, "loyalty tier");
+    }
+
+    private static <E extends Enum<E>> E parseEnum(
+            String input,
+            Class<E> enumType,
+            String fieldName) throws InputException {
         try {
             return Enum.valueOf(enumType, input.trim().toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException exception) {

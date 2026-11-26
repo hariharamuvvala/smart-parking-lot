@@ -113,10 +113,11 @@ Run the interactive calculator:
 ```
 
 Enter the vehicle type, entry and exit local timestamps
-(`yyyy-MM-ddTHH:mm`, without a timezone), loyalty tier, and optional
-comma-separated public-holiday dates (`yyyy-MM-dd`). The console prints the fare
-and selected policy. Invalid input is reported to stderr and exits with a
-non-zero status.
+(`yyyy-MM-ddTHH:mm`, without a timezone), and loyalty tier. Press Enter at the
+loyalty prompt for `NONE`, or at the public-holiday prompt if there are no
+holidays; otherwise enter comma-separated dates (`yyyy-MM-dd`). The console
+prints the fare and selected policy. Invalid input is reported to stderr and
+exits with a non-zero status.
 
 Run the unit tests:
 

@@ -314,6 +314,7 @@ filename; their full text is in the supplied attachments.
 22. `go ahead next`
 23. `Go ahead`
 24. `lets complete the code first`
+25. The user reported that the console rejected an empty loyalty-tier value.
 
 ### Structured Decisions
 
@@ -356,7 +357,9 @@ pricing engine. Updated the run instructions and architecture/specification
 documents to reflect the console boundary. `gradle clean test` and
 `gradle build` passed; the suite contains 58 tests with no failures or errors.
 The Gradle `run` task was also exercised with a sample input and returned the
-expected `$5.00` Standard Hourly fare.
+expected `$5.00` Standard Hourly fare. After the user reported an empty loyalty
+input, the console was updated to map a blank loyalty response to `NONE`, with
+the prompt, README, and integration test updated accordingly.
 
 ## Transparency Statement
 
