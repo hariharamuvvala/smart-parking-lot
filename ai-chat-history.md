@@ -371,10 +371,11 @@ confirmed the run succeeded.
 
 **User:** `next please`
 
-**Assistant:** Re-ran `gradle clean test` and `gradle build`; all 58 tests passed
-with no failures or errors. Verified that the working tree is clean and
-`main` is synchronized with `origin/main`. No further implementation changes
-were needed for the documented assignment scope.
+**Assistant:** Compared the implementation and documentation against the
+assignment PDFs. Re-ran `gradle clean test` and `gradle build`; all 58 tests
+passed with no failures or errors. The review found that the assignment asks
+README.md itself to cover assumptions, decisions, trade-offs, and alternatives,
+so those summaries were added. Verified the clean working tree and pushed state.
 
 ## Transparency Statement
 

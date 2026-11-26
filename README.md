@@ -70,21 +70,66 @@ comma-separated list of ISO dates for the calculation; leave the prompt blank
 when no holidays are configured. The engine receives these dates through its
 fixed, immutable holiday calendar.
 
-## Assumptions
+## Assumptions, Decisions, and Trade-offs
 
-- Timestamps use a caller-normalized local timezone context.
-- The engine performs no timezone conversion.
-- Exit timestamps must be after entry timestamps.
-- Exit equal to entry is invalid.
-- Exactly 24 hours remains eligible for special policies.
-- Stays strictly longer than 24 hours disable Early Bird and Night Owl.
-- Peak, Early Bird, and Night Owl boundaries use the inclusivity rules in
-  `SPECIFICATION.md`.
-- Reverse tie priority is Night Owl, Early Bird, then Standard Hourly.
-- Public holidays are supplied only by the fixed test calendar.
+### Assumptions
 
-See [SPECIFICATION.md](SPECIFICATION.md) for the complete assumptions and edge
-cases.
+- Entry and exit are caller-normalized local timestamps; the engine does no
+  timezone or daylight-saving conversion.
+- Exit must be strictly after entry. Standard Hourly rounds any partial hour
+  upward; there is no grace period.
+- Exactly 24 hours remains eligible for special rates; longer stays use
+  Standard Hourly only.
+- Early Bird requires same-day entry and exit. Night Owl requires exit on the
+  next consecutive date.
+- Peak windows are weekday-only, exclude configured holidays, and surcharge a
+  whole floating hourly block on any positive overlap.
+- Special rates receive loyalty discounts, then the vehicle multiplier.
+  The same discount tiers apply to Early Bird and Night Owl. Standard Hourly
+  receives the vehicle multiplier but no loyalty discount.
+- Equal fares are resolved Night Owl, then Early Bird, then Standard Hourly.
+- Currency is USD; taxes, external fees, refunds, and persistence are excluded.
+- Tickets and sessions exist only in memory. The calculator and policies are
+  stateless; the configured holiday calendar is immutable.
+- No complete holiday source is specified. The console accepts a fixed set of
+  holiday dates for each calculation; blank means no holidays configured.
+- The domain uses `NONE` for customers without loyalty; a blank console response
+  is converted to `NONE`.
+
+### Design Decisions
+
+- Java 21 and standard-library production code; Gradle builds the project and
+  JUnit 5 is test-only.
+- Immutable domain values represent tickets, sessions, fares, and money.
+  `Money` stores integer cents and uses `BigDecimal` for exact percentage
+  arithmetic with `HALF_UP` rounding.
+- Standard Hourly, Early Bird, and Night Owl are independent policies.
+  `ParkingFeeCalculator` evaluates applicable policies, applies the strict
+  greater-than-24-hour gate, and selects the lowest fare.
+- The console is a thin adapter; the pricing engine has no database, network
+  service, or framework dependency.
+
+### Trade-offs and Alternatives
+
+- A caller-supplied holiday set is deterministic and avoids inventing a
+  jurisdiction-specific calendar, but it is not a production holiday service.
+- `LocalDateTime` keeps the engine platform-agnostic and simple; a caller must
+  normalize timezones before calculation rather than relying on `ZonedDateTime`
+  conversions inside pricing.
+- Per-hour iteration makes floating-block peak behavior explicit and testable;
+  work is proportional to billed hours, so no aggregation or caching is added
+  without evidence it is needed.
+- Separate policy objects add a few small types compared with one large
+  conditional, in exchange for isolated rules and tests.
+- Integer cents avoid floating-point fare errors; `BigDecimal` is retained only
+  for exact intermediate percentage calculations rather than storing every
+  amount as a decimal.
+- A small console makes the engine runnable without a GUI, web API, database,
+  or presentation framework, none of which is required for this assignment.
+
+See [SPECIFICATION.md](SPECIFICATION.md) for detailed rules and edge cases, and
+[ARCHITECTURE.md](ARCHITECTURE.md) for component responsibilities and design
+details.
 
 ## Validation
 
@@ -137,4 +182,5 @@ The project documentation is separate from this README:
 
 - Project rationale and assumptions are in `SPECIFICATION.md`.
 - Architecture decisions are in `ARCHITECTURE.md`.
-- The complete AI interaction history is in `ai-chat-history.md`.
+- User prompts, decisions, and phase summaries are in `ai-chat-history.md`.
+- No custom agents or complex AI workflows were used.
