@@ -1,0 +1,15 @@
+﻿flowchart TD
+    Input["Parking fee input"]
+    Null{"Any required object or timestamp is null?"}
+    Vehicle{"Vehicle or loyalty value invalid?"}
+    Chronology{"Exit <= entry?"}
+    Reject["Reject before policy evaluation"]
+    Calculate["Calculate session"]
+
+    Input --> Null
+    Null -->|Yes| Reject
+    Null -->|No| Vehicle
+    Vehicle -->|Yes| Reject
+    Vehicle -->|No| Chronology
+    Chronology -->|Yes| Reject
+    Chronology -->|No| Calculate

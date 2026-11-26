@@ -1,0 +1,22 @@
+﻿flowchart TD
+    Candidates["Collect applicable policy candidates"]
+    Minimum["Find minimum exact-cent fare"]
+    Tie{"More than one policy<br/>has the minimum?"}
+    Night{"Night Owl candidate?"}
+    Early{"Early Bird candidate?"}
+    Standard["Select Standard Hourly"]
+    ReturnNight["Select Night Owl"]
+    ReturnEarly["Select Early Bird"]
+    Fare["Return Fare"]
+
+    Candidates --> Minimum
+    Minimum --> Tie
+    Tie -->|No| Fare
+    Tie -->|Yes| Night
+    Night -->|Yes| ReturnNight
+    Night -->|No| Early
+    Early -->|Yes| ReturnEarly
+    Early -->|No| Standard
+    ReturnNight --> Fare
+    ReturnEarly --> Fare
+    Standard --> Fare

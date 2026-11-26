@@ -1,0 +1,46 @@
+﻿flowchart TB
+    subgraph App["Application Boundary"]
+        Main["Main / Future Adapter"]
+    end
+
+    subgraph Engine["Pricing Engine"]
+        Calculator["ParkingFeeCalculator"]
+        Standard["StandardHourlyPolicy"]
+        Early["EarlyBirdPolicy"]
+        Night["NightOwlPolicy"]
+    end
+
+    subgraph Domain["Domain Layer"]
+        Ticket["ParkingTicket"]
+        Session["ParkingSession"]
+        Vehicle["VehicleType"]
+        Loyalty["LoyaltyTier"]
+        Money["Money"]
+        Fare["Fare"]
+    end
+
+    subgraph Calendar["Calendar and Time Layer"]
+        Holiday["PublicHolidayCalendar"]
+        Fixed["FixedPublicHolidayCalendar"]
+        Window["TimeWindow"]
+    end
+
+    Main -->|"Create ticket and session"| Calculator
+    Calculator --> Ticket
+    Calculator --> Session
+    Calculator --> Standard
+    Calculator --> Early
+    Calculator --> Night
+
+    Standard --> Window
+    Standard --> Holiday
+    Standard --> Vehicle
+
+    Early --> Vehicle
+    Early --> Loyalty
+    Night --> Vehicle
+    Night --> Loyalty
+
+    Fixed -. "implements" .-> Holiday
+    Calculator -->|"creates"| Fare
+    Fare --> Money

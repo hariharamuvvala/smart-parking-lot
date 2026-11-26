@@ -1,0 +1,14 @@
+﻿stateDiagram-v2
+    [*] --> InputReceived
+    InputReceived --> InvalidNullInput: null ticket, timestamp, vehicle, loyalty, or calendar
+    InputReceived --> InvalidTimestamp: exit <= entry
+    InputReceived --> ValidSession: exit > entry
+    InvalidNullInput --> [*]: throw validation exception
+    InvalidTimestamp --> [*]: throw validation exception
+    ValidSession --> Over24Hours: duration > 24 hours
+    ValidSession --> Within24Hours: duration <= 24 hours
+    Over24Hours --> StandardOnly
+    Within24Hours --> MultiPolicyEvaluation
+    MultiPolicyEvaluation --> FareSelected
+    StandardOnly --> FareSelected
+    FareSelected --> [*]

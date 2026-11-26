@@ -1,0 +1,14 @@
+﻿flowchart LR
+    REST["Future REST Adapter"]
+    CLI["Future CLI Adapter"]
+    Persistence["Future Persistence Adapter"]
+
+    DomainAPI["ParkingFeeCalculator"]
+
+    REST -->|"validated DTO conversion"| DomainAPI
+    CLI -->|"validated argument conversion"| DomainAPI
+    Persistence -->|"ticket/session lookup"| DomainAPI
+
+    DomainAPI -->|"Fare"| REST
+    DomainAPI -->|"Fare"| CLI
+    DomainAPI -->|"Fare"| Persistence

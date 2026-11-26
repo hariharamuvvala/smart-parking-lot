@@ -1,0 +1,30 @@
+﻿flowchart TD
+    Start["Receive ParkingSession"]
+    Validate["Validate session"]
+    Duration["Calculate elapsed duration"]
+    Round["Round upward to whole hours"]
+    Blocks["Create floating hourly blocks<br/>starting at entry"]
+    Loop{"Remaining blocks?"}
+    Base["Get progressive car rate<br/>5, 3, then 2"]
+    Weekday["Weekday and not public holiday?"]
+    Peak["Block partially overlaps peak window?"]
+    Surcharge["Multiply block by 1.5"]
+    Sum["Add block amount"]
+    Vehicle["Apply vehicle multiplier"]
+    Result["Return exact cent amount"]
+
+    Start --> Validate
+    Validate --> Duration
+    Duration --> Round
+    Round --> Blocks
+    Blocks --> Loop
+    Loop -->|Yes| Base
+    Base --> Weekday
+    Weekday -->|Yes| Peak
+    Weekday -->|No| Sum
+    Peak -->|Yes| Surcharge
+    Peak -->|No| Sum
+    Surcharge --> Sum
+    Sum --> Loop
+    Loop -->|No| Vehicle
+    Vehicle --> Result

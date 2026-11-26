@@ -1,0 +1,27 @@
+﻿sequenceDiagram
+    actor Client
+    participant Calculator as ParkingFeeCalculator
+    participant Session as ParkingSession
+    participant Standard as StandardHourlyPolicy
+    participant Early as EarlyBirdPolicy
+    participant Night as NightOwlPolicy
+
+    Client->>Session: construct(ticket, exitTimestamp)
+    Session->>Session: validate exit > entry
+    Client->>Calculator: calculate(session)
+    Calculator->>Session: getElapsedDuration()
+    Calculator->>Standard: calculate(session)
+    Standard-->>Calculator: Optional<Money>
+
+    alt Duration <= 24 hours
+        Calculator->>Early: calculate(session)
+        Early-->>Calculator: Optional<Money>
+        Calculator->>Night: calculate(session)
+        Night-->>Calculator: Optional<Money>
+    else Duration > 24 hours
+        Note over Calculator, Night: Early Bird and Night Owl are skipped
+    end
+
+    Calculator->>Calculator: select minimum amount
+    Calculator->>Calculator: resolve ties by priority
+    Calculator-->>Client: Fare(amount, selectedPolicy)

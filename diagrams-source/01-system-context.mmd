@@ -1,0 +1,13 @@
+﻿flowchart LR
+    Customer["Customer"]
+    Operator["Parking Operator"]
+    EntryExit["Entry / Exit Application"]
+    Engine["Smart Parking Lot<br/>Rate Calculator"]
+    HolidayConfig["Holiday Configuration"]
+
+    Customer -->|"Entry and exit information"| EntryExit
+    Operator -->|"Vehicle, ticket, loyalty input"| EntryExit
+    EntryExit -->|"ParkingTicket and exit timestamp"| Engine
+    HolidayConfig -->|"Public-holiday dates"| Engine
+    Engine -->|"Final fare and selected policy"| EntryExit
+    EntryExit -->|"Fare or ticket settlement result"| Customer

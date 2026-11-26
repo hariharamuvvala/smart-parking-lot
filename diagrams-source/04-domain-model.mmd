@@ -1,0 +1,60 @@
+﻿classDiagram
+    class VehicleType {
+        <<enumeration>>
+        MOTORCYCLE
+        CAR
+        BUS
+        getMultiplier()
+    }
+
+    class LoyaltyTier {
+        <<enumeration>>
+        NONE
+        SILVER
+        GOLD
+        PLATINUM
+        getDiscountPercentage()
+    }
+
+    class Money {
+        <<value object>>
+        -long cents
+        ofCents(long)
+        plus(Money)
+        multiply(BigDecimal)
+        discount(BigDecimal)
+    }
+
+    class ParkingTicket {
+        <<immutable>>
+        -VehicleType vehicle
+        -LocalDateTime entryTimestamp
+        -LoyaltyTier loyaltyTier
+    }
+
+    class ParkingSession {
+        <<immutable>>
+        -ParkingTicket ticket
+        -LocalDateTime exitTimestamp
+        getElapsedDuration()
+        isOver24Hours()
+    }
+
+    class PolicyName {
+        <<enumeration>>
+        STANDARD_HOURLY
+        EARLY_BIRD
+        NIGHT_OWL
+    }
+
+    class Fare {
+        <<immutable>>
+        -Money amount
+        -PolicyName selectedPolicy
+    }
+
+    ParkingTicket --> VehicleType
+    ParkingTicket --> LoyaltyTier
+    ParkingSession --> ParkingTicket
+    Fare --> Money
+    Fare --> PolicyName

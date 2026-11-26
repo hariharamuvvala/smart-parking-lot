@@ -1,0 +1,25 @@
+﻿flowchart TD
+    Start["Receive ParkingSession"]
+    Duration{"Duration <= 24 hours?"}
+    Standard["Standard policy is always evaluated"]
+    EarlyWindow{"Entry 06:00-09:00<br/>and exit 15:30-19:00?<br/>Same day?"}
+    NightWindow{"Entry >= 18:00<br/>and exit next day 05:00-10:00?"}
+    EarlyCandidate["Early Bird candidate: $15 car"]
+    NightCandidate["Night Owl candidate: $8 car"]
+    Skipped["Special policies skipped"]
+    Discounts["Apply loyalty discount"]
+    Multiplier["Apply vehicle multiplier"]
+    Candidates["Add valid candidate(s)"]
+
+    Start --> Duration
+    Duration -->|Yes| Standard
+    Duration -->|Yes| EarlyWindow
+    Duration -->|Yes| NightWindow
+    Duration -->|No| Skipped
+    Skipped --> Standard
+    EarlyWindow -->|Yes| EarlyCandidate
+    NightWindow -->|Yes| NightCandidate
+    EarlyCandidate --> Discounts
+    NightCandidate --> Discounts
+    Discounts --> Multiplier
+    Multiplier --> Candidates

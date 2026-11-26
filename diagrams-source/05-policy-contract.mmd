@@ -1,0 +1,35 @@
+﻿classDiagram
+    class RatePolicy {
+        <<interface>>
+        calculate(ParkingSession) Optional~Money~
+    }
+
+    class StandardHourlyPolicy {
+        +calculate(ParkingSession) Optional~Money~
+    }
+
+    class EarlyBirdPolicy {
+        +calculate(ParkingSession) Optional~Money~
+    }
+
+    class NightOwlPolicy {
+        +calculate(ParkingSession) Optional~Money~
+    }
+
+    class PublicHolidayCalendar {
+        <<interface>>
+        isPublicHoliday(LocalDate) boolean
+    }
+
+    class TimeWindow {
+        <<value object>>
+        -LocalTime start
+        -LocalTime end
+        overlaps(LocalDateTime, LocalDateTime)
+    }
+
+    RatePolicy <|.. StandardHourlyPolicy
+    RatePolicy <|.. EarlyBirdPolicy
+    RatePolicy <|.. NightOwlPolicy
+    StandardHourlyPolicy --> PublicHolidayCalendar
+    StandardHourlyPolicy --> TimeWindow

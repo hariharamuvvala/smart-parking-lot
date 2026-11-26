@@ -1,0 +1,20 @@
+﻿flowchart TB
+    subgraph Runtime["Java Runtime"]
+        Domain["Domain Classes"]
+        Pricing["Pricing Engine"]
+        Calendar["Holiday Calendar"]
+        Entry["Optional Main / Future Adapter"]
+
+        Entry --> Pricing
+        Pricing --> Domain
+        Pricing --> Calendar
+    end
+
+    subgraph External["External Resources"]
+        HolidayData["Fixed Holiday Date Set"]
+        TestRunner["JUnit Test Runner"]
+    end
+
+    HolidayData --> Calendar
+    TestRunner --> Domain
+    TestRunner --> Pricing
