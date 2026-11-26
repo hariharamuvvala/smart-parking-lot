@@ -315,6 +315,9 @@ filename; their full text is in the supplied attachments.
 23. `Go ahead`
 24. `lets complete the code first`
 25. The user reported that the console rejected an empty loyalty-tier value.
+26. The user reported an invalid session because the exit time was not after entry.
+27. `success,`
+28. `next please`
 
 ### Structured Decisions
 
@@ -359,7 +362,19 @@ documents to reflect the console boundary. `gradle clean test` and
 The Gradle `run` task was also exercised with a sample input and returned the
 expected `$5.00` Standard Hourly fare. After the user reported an empty loyalty
 input, the console was updated to map a blank loyalty response to `NONE`, with
-the prompt, README, and integration test updated accordingly.
+the prompt, README, and integration test updated accordingly. The user later
+reported an exit timestamp validation error; clarified that exit must be
+strictly after entry and recommended plain Gradle console output. The user
+confirmed the run succeeded.
+
+### 19. Final Acceptance Check
+
+**User:** `next please`
+
+**Assistant:** Re-ran `gradle clean test` and `gradle build`; all 58 tests passed
+with no failures or errors. Verified that the working tree is clean and
+`main` is synchronized with `origin/main`. No further implementation changes
+were needed for the documented assignment scope.
 
 ## Transparency Statement
 
